@@ -23,6 +23,9 @@ COPY --from=python:3.10-slim-bullseye /usr/local/bin/pip3 /usr/local/bin/pip3
 COPY --from=docker:20.10 /usr/local/bin /usr/local/bin
 COPY --from=docker:20.10 /usr/libexec/docker /usr/libexec/docker
 
+# Copy Terraform binaries
+COPY --from=hashicorp/terraform:1.2.5 /bin/terraform /bin/terraform
+
 RUN Arch="$(uname -m)" \
     && apt-get update && apt-get upgrade -y \
     && apt-get install -y jq curl unzip make git libsqlite3-0 apt-transport-https ca-certificates gnupg lsb-release \
@@ -45,4 +48,5 @@ RUN Arch="$(uname -m)" \
     && aws --version \
     && ecs-cli --version \
     && gcloud version \
-    && az --version
+    && az --version \
+    && terraform -v
